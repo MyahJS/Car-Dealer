@@ -45,7 +45,10 @@ CarDB::~CarDB(){
 }
 
 void CarDB::changeProbPolicy(prob_t policy){
-    
+    // ChangeProbPolicy
+    // precondtitions: hash table exists
+    // postconditions: set passed collision handling policy to m_newPolicy
+    m_newPolicy = policy;
 }
 
 bool CarDB::insert(Car car){
