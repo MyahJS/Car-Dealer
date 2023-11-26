@@ -1,11 +1,47 @@
 // CMSC 341 - Fall 2023 - Project 4
 #include "dealer.h"
 CarDB::CarDB(int size, hash_fn hash, prob_t probing = DEFPOLCY){
-    
+    // Constructor
+    // preconditions: a size and hash function are passed
+    // postconditions: a new hash table is created
+    //  make sure the size of the table is a prime number between MAXPRIME and MINPRIME
+    //  allocate memory for the table and initialize all member variables
+    if (MINPRIME<=size<=MAXPRIME) {
+        if (isPrime(size)){
+            m_currentCap = size;
+        } else {
+            m_currentCap = findNextPrime(size);
+        }
+    } else {
+        m_currentCap = (size<MINPRIME) ? MINPRIME : MAXPRIME;
+    }
+    m_hash = hash;
+    m_currProbing = probing;
+    m_currentTable = new Car[m_currentCap];
+    m_currentSize = 0;
+    m_currNumDeleted = 0;
+
+    m_newPolicy = NONE;
+
+    m_oldTable = nullptr;
+    m_oldCap = 0;
+    m_oldSize = 0;
+    m_oldNumDeleted = 0;
+    m_oldProbing = NONE;
 }
 
 CarDB::~CarDB(){
-    
+    // Destructor
+    // preconditions: hash table exists
+    // postconditions: deallocate memory
+    if (m_currentTable){
+        delete[] m_currentTable;
+        m_currentTable = nullptr;
+    } 
+    if (m_oldTable){
+        delete[] m_oldTable;
+        m_oldTable = nullptr;
+    }  
 }
 
 void CarDB::changeProbPolicy(prob_t policy){
