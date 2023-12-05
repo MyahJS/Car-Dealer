@@ -346,6 +346,7 @@ private:
         Random RndID(MINID, MAXID);
         Random RndCar(0, 4);
         Random RndQuantity(0, 50);
+        string carModels[5] = {"challenger", "stratos", "gt500", "miura", "x101"};
 
         return Car(carModels[RndCar.getRandNum()], RndQuantity.getRandNum(), RndID.getRandNum(), true);
     }
