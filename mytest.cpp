@@ -120,6 +120,67 @@ public:
         checkIndex(carDB, car3, true);
 
         checkSize(carDB, 3);
+
+        cout << endl;
+    }
+    void getCarTest(CarDB& carDB){
+        cout << "Testing getCar..." << endl;
+
+        // error case: car not in table
+        Car nonExistingCar = carDB.getCar("nonexistent_model", 9999);
+
+        if (nonExistingCar == EMPTY) {
+            cout << "PASS: Got EMPTY object for a non-existing Car" << endl;
+        } else {
+            cout << "FAIL: Got a non-empty object for a non-existing Car" << endl;
+        }
+
+        // test with non colliding cars
+        int dataSize = 3;
+
+        Car data[dataSize] = {
+            Car("model1", 10, 1001, false),
+            Car("model2", 15, 1002, false),
+            Car("model3", 20, 1003, false)
+        };
+
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(data[i]);
+        }
+
+        // attempt to get each Car object and check if it matches the expected value
+        for (int i = 0; i < dataSize; ++i) {
+            Car retrievedCar = carDB.getCar(data[i].getModel(), data[i].getDealer());
+            if (retrievedCar == data[i]) {
+                cout << "PASS: Successfully retrieved the Car object" << endl;
+            } else {
+                cout << "FAIL: Incorrect Car object retrieved" << endl;
+            }
+        }
+
+        // test with colliding cars
+        int dataSize = 3;
+
+        Car data[dataSize] = {
+            Car("model3", 25, 1004, false),
+            Car("model4", 30, 1005, false),
+            Car("model5", 35, 1006, false)
+        };
+
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(data[i]);
+        }
+
+        // attempt to get each Car object and check if it matches the expected value
+        for (int i = 0; i < dataSize; ++i) {
+            Car retrievedCar = carDB.getCar(data[i].getModel(), data[i].getDealer());
+            if (retrievedCar == data[i]) {
+                cout << "PASS: Successfully retrieved the Car object" << endl;
+            } else {
+                cout << "FAIL: Incorrect Car object retrieved" << endl;
+            }
+        }
+        cout << endl;
     }
 private:
     // helper to check for correct index
@@ -140,6 +201,7 @@ private:
             cout << "FAIL: Incorrect data size" << endl;
         }
     }
+
 };
 
 unsigned int hashCode(const string str);
@@ -150,8 +212,11 @@ string dealers[5] = {"super car", "mega car", "car world", "car joint", "shack o
 int main(){
 
     Tester tester;
-    CarDB testdb(MINPRIME, hashCode, QUADRATIC);
-    tester.insertTest(testdb);
+    CarDB testdb1(MINPRIME, hashCode, QUADRATIC);
+    tester.insertTest(testdb1);
+
+    CarDB testdb2(MINPRIME, hashCode, QUADRATIC);
+    tester.getCarTest(testdb2);
     
     vector<Car> dataList;
     Random RndID(MINID,MAXID);
