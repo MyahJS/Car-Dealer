@@ -187,9 +187,7 @@ bool CarDB::remove(Car car){
 
     // find first index using hash function
     int index = m_hash(car.getModel()) % m_currentCap;
-    int index2 = m_hash(car.getModel()) % m_oldCap;
     int org_index = index;
-    int org_index2 = index2;
     int i = 0;
     // find node in current or old tree and set as deleted
     if (m_oldTable==nullptr){
@@ -211,6 +209,8 @@ bool CarDB::remove(Car car){
             return false;
         }
     } else {
+        int index2 = m_hash(car.getModel()) % m_oldCap;
+        int org_index2 = index2;
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
                 index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
@@ -349,9 +349,7 @@ Car CarDB::getCar(string model, int dealer) const{
 
     // get first index using hash function
     int index = m_hash(model) % m_currentCap;
-    int index2 = m_hash(model) % m_oldCap;
     int org_index = index;
-    int org_index2 = index2;
     int i = 0;
 
     // check if old table is empty
@@ -373,6 +371,8 @@ Car CarDB::getCar(string model, int dealer) const{
             return EMPTY;
         }
     } else {
+        int index2 = m_hash(model) % m_oldCap;
+        int org_index2 = index2;
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
                 index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
