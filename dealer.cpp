@@ -169,7 +169,7 @@ bool CarDB::insert(Car car){
             i++;
         }
         // check if rehash complete
-        if (m_currentSize>=m_oldSize)
+        if (m_oldNumDeleted==m_oldSize)
             delete[] m_oldTable;
             m_oldCap = 0;
             m_oldNumDeleted = 0;
@@ -331,7 +331,7 @@ bool CarDB::remove(Car car){
             i++;
         }
         // check if rehash complete
-        if (m_currentSize>=m_oldSize)
+        if (m_oldNumDeleted==m_oldSize)
             delete[] m_oldTable;
             m_oldCap = 0;
             m_oldNumDeleted = 0;
