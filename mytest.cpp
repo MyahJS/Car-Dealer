@@ -163,8 +163,8 @@ public:
 
         Car data2[dataSize] = {
             Car("model3", 25, 1004, false),
-            Car("model4", 30, 1005, false),
-            Car("model5", 35, 1006, false)
+            Car("model2", 30, 1005, false),
+            Car("model1", 35, 1006, false)
         };
 
         for (int i = 0; i < dataSize; ++i) {
@@ -178,6 +178,54 @@ public:
                 cout << "PASS: Successfully retrieved the Car object" << endl;
             } else {
                 cout << "FAIL: Incorrect Car object retrieved" << endl;
+            }
+        }
+        cout << endl;
+    }
+    void removeTest(CarDB& carDB){
+        cout << "Testing remove..." << endl;
+
+        // test with non colliding cars
+        int dataSize = 3;
+
+        Car data[dataSize] = {
+            Car("model1", 10, 1001, false),
+            Car("model2", 15, 1002, false),
+            Car("model3", 20, 1003, false)
+        };
+
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(data[i]);
+        }
+
+        // attempt to remove each Car object and check if it is removed successfully
+        for (int i = 0; i < dataSize; ++i) {
+            if (carDB.remove(data[i])) {
+                cout << "PASS: Successfully removed the Car object" << endl;
+            } else {
+                cout << "FAIL: Failed to remove the Car object" << endl;
+            }
+        }
+
+        // test with colliding cars
+        dataSize = 3;
+
+        Car data2[dataSize] = {
+            Car("model3", 25, 1004, false),
+            Car("model2", 30, 1005, false),
+            Car("model1", 35, 1006, false)
+        };
+
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(data2[i]);
+        }
+
+        // attempt to remove each Car object and check if it is removed successfully
+        for (int i = 0; i < dataSize; ++i) {
+            if (carDB.remove(data2[i])) {
+                cout << "PASS: Successfully removed the Car object" << endl;
+            } else {
+                cout << "FAIL: Failed to remove the Car object" << endl;
             }
         }
         cout << endl;
@@ -217,6 +265,9 @@ int main(){
 
     CarDB testdb2(MINPRIME, hashCode, QUADRATIC);
     tester.getCarTest(testdb2);
+
+    CarDB testdb3(MINPRIME, hashCode, QUADRATIC);
+    tester.removeTest(testdb3);
     
     vector<Car> dataList;
     Random RndID(MINID,MAXID);
