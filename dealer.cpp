@@ -186,19 +186,21 @@ bool CarDB::remove(Car car){
     // postconditions:
 
     // find first index using hash function
-    int index = m_hash(car.getModel());
-    int index2 = index;
+    int index = m_hash(car.getModel()) % m_currentCap;
+    int index2 = m_hash(car.getModel()) % m_oldCap;
+    int org_index = index;
+    int org_index2 = index2;
     int i = 0;
     // find node in current or old tree and set as deleted
     if (m_oldTable==nullptr){
         if (m_currProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_currentTable[index]==EMPTY)){
-                index = ((m_hash(car.getModel()) % m_currentCap) + (i*i)) % m_currentCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
                 i++;
             }
         } else {
             while (!(m_currentTable[index]==car) && !(m_currentTable[index]==EMPTY)){
-                index = ((m_hash(car.getModel()) % m_currentCap) + i * (11 - (m_hash(car.getModel()) % 11))) % m_currentCap;
+                index = ((org_index % m_currentCap) + i * (11 - (org_index % 11))) % m_currentCap;
                 i++;
             }
         }
@@ -211,26 +213,26 @@ bool CarDB::remove(Car car){
     } else {
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
-                index = ((m_hash(car.getModel()) % m_currentCap) + (i*i)) % m_currentCap;
-                index2 = ((m_hash(car.getModel()) % m_oldCap) + (i*i)) % m_oldCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + (i*i)) % m_oldCap;
                 i++;
             }
         } else if (m_currProbing==DOUBLEHASH && m_oldProbing==DOUBLEHASH){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
-                index = ((m_hash(car.getModel()) % m_currentCap) + i * (11 - (m_hash(car.getModel()) % 11))) % m_currentCap;
-                index2 = ((m_hash(car.getModel()) % m_oldCap) + i * (11 - (m_hash(car.getModel()) % 11))) % m_oldCap;
+                index = ((org_index % m_currentCap) + i * (11 - (org_index % 11))) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + i * (11 - (org_index2 % 11))) % m_oldCap;
                 i++;
             }
         } else if (m_currProbing==QUADRATIC && m_oldProbing==DOUBLEHASH){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
-                index = ((m_hash(car.getModel()) % m_currentCap) + (i*i)) % m_currentCap;
-                index2 = ((m_hash(car.getModel()) % m_oldCap) + i * (11 - (m_hash(car.getModel()) % 11))) % m_oldCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + i * (11 - (org_index2 % 11))) % m_oldCap;
                 i++;
             }
         } else if (m_currProbing==DOUBLEHASH && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY))){
-                index = ((m_hash(car.getModel()) % m_currentCap) + i * (11 - (m_hash(car.getModel()) % 11))) % m_currentCap;
-                index2 = ((m_hash(car.getModel()) % m_oldCap) + (i*i)) % m_oldCap;
+                index = ((org_index % m_currentCap) + i * (11 - (org_index % 11))) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + (i*i)) % m_oldCap;
                 i++;
             }
         }
@@ -268,20 +270,20 @@ bool CarDB::remove(Car car){
             int portion = m_oldSize/4;
             int i = 0;
             int j = 0;
-            int index;
             while (j<portion){
                 if (m_oldTable[i].getUsed()==true){
                     // insert into new table
-                    index = m_hash(m_oldTable[i].getModel());
+                    index = m_hash(m_oldTable[i].getModel()) % m_currentCap;
+                    org_index = index;
                     int k = 0;
                     if (m_currProbing==QUADRATIC){
                         while (!(m_currentTable[index]==EMPTY)){
-                            index = ((m_hash(m_oldTable[i].getModel()) % m_currentCap) + (k*k)) % m_currentCap;
+                            index = ((org_index % m_currentCap) + (k*k)) % m_currentCap;
                             k++;
                         }
                     } else {
                         while (!(m_currentTable[index]==EMPTY)){
-                            index = ((m_hash(m_oldTable[i].getModel()) % m_currentCap) + k * (11-(m_hash(m_oldTable[i].getModel()) % 11))) % m_currentCap;
+                            index = ((org_index % m_currentCap) + k * (11-(org_index % 11))) % m_currentCap;
                             k++;
                         }
                     }
@@ -303,20 +305,20 @@ bool CarDB::remove(Car car){
         }
         int i = 0;
         int j = m_currentSize;
-        int index;
         while (j<portion){
             if (m_oldTable[i].getUsed()==true){
                 // insert into new table
-                index = m_hash(m_oldTable[i].getModel());
+                index = m_hash(m_oldTable[i].getModel()) % m_currentCap;
+                org_index = index;
                 int k = 0;
                 if (m_currProbing==QUADRATIC){
                     while (!(m_currentTable[index]==EMPTY)){
-                        index = ((m_hash(m_oldTable[i].getModel()) % m_currentCap) + (k*k)) % m_currentCap;
+                        index = ((org_index % m_currentCap) + (k*k)) % m_currentCap;
                         k++;
                     }
                 } else {
                     while (!(m_currentTable[index]==EMPTY)){
-                        index = ((m_hash(m_oldTable[i].getModel()) % m_currentCap) + k * (11-(m_hash(m_oldTable[i].getModel()) % 11))) % m_currentCap;
+                        index = ((org_index % m_currentCap) + k * (11-(org_index % 11))) % m_currentCap;
                         k++;
                     }
                 }
@@ -346,20 +348,22 @@ Car CarDB::getCar(string model, int dealer) const{
     // postconditions:
 
     // get first index using hash function
-    int index = m_hash(model);
-    int index2 = index;
+    int index = m_hash(model) % m_currentCap;
+    int index2 = m_hash(model) % m_oldCap;
+    int org_index = index;
+    int org_index2 = index2;
     int i = 0;
 
     // check if old table is empty
     if (m_oldTable==nullptr){
         if (m_currProbing==QUADRATIC){
             while (!(m_currentTable[index].getDealer()==dealer) && !(m_currentTable[index]==EMPTY)){
-                index = ((m_hash(model) % m_currentCap) + (i*i)) % m_currentCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
                 i++;
             }
         } else {
             while (!(m_currentTable[index].getDealer()==dealer) && !(m_currentTable[index]==EMPTY)){
-                index = ((m_hash(model) % m_currentCap) + i * (11-(m_hash(model) % 11))) % m_currentCap;
+                index = ((org_index % m_currentCap) + i * (11-(org_index % 11))) % m_currentCap;
                 i++;
             }
         }
@@ -371,26 +375,26 @@ Car CarDB::getCar(string model, int dealer) const{
     } else {
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
-                index = ((m_hash(model) % m_currentCap) + (i*i)) % m_currentCap;
-                index2 = ((m_hash(model) % m_oldCap) + (i*i)) % m_oldCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + (i*i)) % m_oldCap;
                 i++; 
             }
         } else if (m_currProbing==DOUBLEHASH && m_oldProbing==DOUBLEHASH){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
-                index = ((m_hash(model) % m_currentCap) + i * (11-(m_hash(model) % 11))) % m_currentCap;
-                index2 = ((m_hash(model) % m_oldCap) + i * (11-(m_hash(model) % 11))) % m_oldCap;
+                index = ((org_index % m_currentCap) + i * (11-(org_index % 11))) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + i * (11-(org_index2 % 11))) % m_oldCap;
                 i++;
             }
         } else if (m_currProbing==QUADRATIC && m_oldProbing==DOUBLEHASH){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
-                index = ((m_hash(model) % m_currentCap) + (i*i)) % m_currentCap;
-                index2 = ((m_hash(model) % m_oldCap) + i * (11-(m_hash(model) % 11))) % m_oldCap;
+                index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + i * (11-(org_index2 % 11))) % m_oldCap;
                 i++;
             }
         } else if (m_currProbing==DOUBLEHASH && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
-                index = ((m_hash(model) % m_currentCap) + i * (11-(m_hash(model) % 11))) % m_currentCap;
-                index2 = ((m_hash(model) % m_oldCap) + (i*i)) % m_oldCap;
+                index = ((org_index % m_currentCap) + i * (11-(org_index % 11))) % m_currentCap;
+                index2 = ((org_index2 % m_oldCap) + (i*i)) % m_oldCap;
                 i++;
             }
         }
