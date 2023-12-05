@@ -233,16 +233,26 @@ public:
         }
         cout << endl;
     }
-    void testRehashing(CarDB& carDB) {
+    void rehashTest(CarDB& carDB) {
         cout << "Testing rehashing in CarDB...\n";
 
-        // Test rehash completion after triggering rehash due to load factor
-        cout << "Testing rehash completion after triggering rehash due to load factor...\n";
-        testRehashCompletionAfterLoadFactor(carDB);
+        // test rehash completion after triggering rehash due to load factor
+        int dataSize = 50;
 
-        // Test rehash completion after triggering rehash due to delete ratio
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(generateRandomCar());
+        }
+        cout << "Testing rehash completion after triggering rehash due to load factor...\n";
+        RehashCompletionLF(carDB);
+
+        // test rehash completion after triggering rehash due to delete ratio
+        for (int i = 0; i < dataSize / 2; ++i) {
+            carDB.remove(generateRandomCar());
+        }
         cout << "Testing rehash completion after triggering rehash due to delete ratio...\n";
-        testRehashCompletionAfterDeleteRatio(carDB);
+        RehashCompletionDR(carDB);
+
+        cout << endl;
     }
 
 private:
@@ -264,28 +274,28 @@ private:
             cout << "FAIL: Incorrect data size" << endl;
         }
     }
-    // Helper function to test rehash completion after triggering rehash due to load factor
-    void testRehashCompletionAfterLoadFactor(CarDB& carDB) {
-        // Continue inserting until rehashing is completed
+    // helper function to test rehash completion after triggering rehash due to load factor
+    void RehashCompletionLF(CarDB& carDB) {
+        // continue inserting until rehashing is completed
         while (carDB.m_oldTable != nullptr) {
             carDB.insert(generateRandomCar());
         }
 
-        // Check if rehashing is completed
+        // check if rehashing is completed
         if (carDB.m_oldTable == nullptr && carDB.m_currentTable != nullptr) {
             cout << "PASS: Rehashing is completed after triggering rehash due to load factor.\n";
         } else {
             cout << "FAIL: Rehashing is not completed after triggering rehash due to load factor.\n";
         }
     }
-    // Helper function to test rehash completion after triggering rehash due to delete ratio
-    void testRehashCompletionAfterDeleteRatio(CarDB& carDB) {
-        // Continue removing until rehashing is completed
+    // helper function to test rehash completion after triggering rehash due to delete ratio
+    void RehashCompletionDR(CarDB& carDB) {
+        // continue removing until rehashing is completed
         while (carDB.m_oldTable != nullptr) {
             carDB.remove(generateRandomCar());
         }
 
-        // Check if rehashing is completed
+        // check if rehashing is completed
         if (carDB.m_oldTable == nullptr && carDB.m_currentTable != nullptr) {
             cout << "PASS: Rehashing is completed after triggering rehash due to delete ratio.\n";
         } else {
@@ -322,7 +332,7 @@ int main(){
     tester.removeTest(testdb3);
 
     CarDB testdb4(MINPRIME, hashCode, QUADRATIC);
-    tester.testRehashing(testdb4);
+    tester.rehashTest(testdb4);
     
     vector<Car> dataList;
     Random RndID(MINID,MAXID);
