@@ -96,6 +96,8 @@ bool CarDB::insert(Car car){
             m_oldCap = m_currentCap;
             m_currentCap = findNextPrime(m_currentCap*4);
             m_currentTable = new Car[m_currentCap];
+            for (int i = 0; i < m_currentCap; ++i)
+                m_currentTable[i] = EMPTY;
 
             m_oldNumDeleted = m_currNumDeleted;
             m_currNumDeleted = 0;
@@ -258,6 +260,8 @@ bool CarDB::remove(Car car){
             m_oldCap = m_currentCap;
             m_currentCap = findNextPrime(m_currentCap*4);
             m_currentTable = new Car[m_currentCap];
+            for (int i = 0; i < m_currentCap; ++i)
+                m_currentTable[i] = EMPTY;
 
             m_oldNumDeleted = m_currNumDeleted;
             m_currNumDeleted = 0;
