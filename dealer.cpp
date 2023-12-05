@@ -18,6 +18,8 @@ CarDB::CarDB(int size, hash_fn hash, prob_t probing = DEFPOLCY){
     m_hash = hash;
     m_currProbing = probing;
     m_currentTable = new Car[m_currentCap];
+    for (int i = 0; i < m_currentCap; ++i)
+        m_currentTable[i] = EMPTY;
     m_currentSize = 0;
     m_currNumDeleted = 0;
 
