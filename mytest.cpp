@@ -274,7 +274,7 @@ private:
     }
     // Helper function to test rehashing after a descent number of data insertion
     void testRehashingAfterInsertion(CarDB& carDB) {
-        const int dataSize = 50;
+        const int dataSize = 60;
 
         // Insert a descent number of data points
         for (int i = 0; i < dataSize; ++i) {
