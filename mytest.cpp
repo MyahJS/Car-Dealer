@@ -210,6 +210,9 @@ public:
         // test with colliding cars
         dataSize = 3;
 
+        // increase size to avoid rehashing
+        carDB.m_currentSize = 20;
+
         Car data2[dataSize] = {
             Car("model3", 25, 1004, false),
             Car("model2", 30, 1005, false),
