@@ -233,6 +233,26 @@ public:
         }
         cout << endl;
     }
+    void testRehashing(CarDB& carDB) {
+        cout << "Testing rehashing in CarDB...\n";
+
+        // Test rehashing is triggered after a descent number of data insertion
+        cout << "Testing rehashing after a descent number of data insertion...\n";
+        testRehashingAfterInsertion(carDB);
+
+        // Test rehash completion after triggering rehash due to load factor
+        cout << "Testing rehash completion after triggering rehash due to load factor...\n";
+        testRehashCompletionAfterLoadFactor(carDB);
+
+        // Test rehashing is triggered after a descent number of data removal
+        cout << "Testing rehashing after a descent number of data removal...\n";
+        testRehashingAfterRemoval(carDB);
+
+        // Test rehash completion after triggering rehash due to delete ratio
+        cout << "Testing rehash completion after triggering rehash due to delete ratio...\n";
+        testRehashCompletionAfterDeleteRatio(carDB);
+    }
+
 private:
     // helper to check for correct index
     void checkIndex(CarDB& carDB, const Car& car, bool expectedResult) {
@@ -252,7 +272,83 @@ private:
             cout << "FAIL: Incorrect data size" << endl;
         }
     }
+    // Helper function to test rehashing after a descent number of data insertion
+    void testRehashingAfterInsertion(CarDB& carDB) {
+        const int dataSize = 50;
 
+        // Insert a descent number of data points
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(generateRandomCar());
+        }
+
+        // Check if rehashing is triggered
+        if (carDB.m_oldTable != nullptr) {
+            cout << "PASS: Rehashing is triggered after a descent number of data insertion.\n";
+        } else {
+            cout << "FAIL: Rehashing is not triggered after a descent number of data insertion.\n";
+        }
+    }
+
+    // Helper function to test rehash completion after triggering rehash due to load factor
+    void testRehashCompletionAfterLoadFactor(CarDB& carDB) {
+        // Continue inserting until rehashing is completed
+        while (carDB.m_oldTable != nullptr) {
+            carDB.insert(generateRandomCar());
+        }
+
+        // Check if rehashing is completed
+        if (carDB.m_oldTable == nullptr && carDB.m_currentTable != nullptr) {
+            cout << "PASS: Rehashing is completed after triggering rehash due to load factor.\n";
+        } else {
+            cout << "FAIL: Rehashing is not completed after triggering rehash due to load factor.\n";
+        }
+    }
+
+    // Helper function to test rehashing after a descent number of data removal
+    void testRehashingAfterRemoval(CarDB& carDB) {
+        const int dataSize = 50;
+
+        // Insert a descent number of data points
+        for (int i = 0; i < dataSize; ++i) {
+            carDB.insert(generateRandomCar());
+        }
+
+        // Remove a descent number of data points
+        for (int i = 0; i < dataSize / 2; ++i) {
+            carDB.remove(generateRandomCar());
+        }
+
+        // Check if rehashing is triggered
+        if (carDB.m_oldTable != nullptr) {
+            cout << "PASS: Rehashing is triggered after a descent number of data removal.\n";
+        } else {
+            cout << "FAIL: Rehashing is not triggered after a descent number of data removal.\n";
+        }
+    }
+
+    // Helper function to test rehash completion after triggering rehash due to delete ratio
+    void testRehashCompletionAfterDeleteRatio(CarDB& carDB) {
+        // Continue removing until rehashing is completed
+        while (carDB.m_oldTable != nullptr) {
+            carDB.remove(generateRandomCar());
+        }
+
+        // Check if rehashing is completed
+        if (carDB.m_oldTable == nullptr && carDB.m_currentTable != nullptr) {
+            cout << "PASS: Rehashing is completed after triggering rehash due to delete ratio.\n";
+        } else {
+            cout << "FAIL: Rehashing is not completed after triggering rehash due to delete ratio.\n";
+        }
+    }
+
+    // Helper function to generate a random Car object for testing
+    Car generateRandomCar() {
+        Random RndID(MINID, MAXID);
+        Random RndCar(0, 4);
+        Random RndQuantity(0, 50);
+
+        return Car(carModels[RndCar.getRandNum()], RndQuantity.getRandNum(), RndID.getRandNum(), true);
+    }
 };
 
 unsigned int hashCode(const string str);
@@ -271,6 +367,9 @@ int main(){
 
     CarDB testdb3(MINPRIME, hashCode, QUADRATIC);
     tester.removeTest(testdb3);
+
+    CarDB testdb4(MINPRIME, hashCode, QUADRATIC);
+    tester.testRehashing(testdb4);
     
     vector<Car> dataList;
     Random RndID(MINID,MAXID);
