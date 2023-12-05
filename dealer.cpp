@@ -63,6 +63,9 @@ bool CarDB::insert(Car car){
     // find first index using hash function
     int index = m_hash(car.getModel());
 
+    if (index>=m_currentCap)
+        return false;
+
     // check if index is occupied
     if (m_currentTable[index]==EMPTY){
         m_currentTable[index] = car;
