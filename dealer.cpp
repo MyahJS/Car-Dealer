@@ -73,6 +73,7 @@ bool CarDB::insert(Car car){
             i++;
         }
         m_currentTable[index] = car;
+        m_currentSize++;
     } else {
         while (!(m_currentTable[index]==EMPTY)){
             if (i>=m_currentCap)
@@ -83,6 +84,7 @@ bool CarDB::insert(Car car){
             i++;
         }
         m_currentTable[index] = car;
+        m_currentSize++;
     }
 
     // rehash here 
