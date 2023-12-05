@@ -237,18 +237,10 @@ public:
         cout << "Testing rehashing in CarDB...\n";
 
         // test rehash completion after triggering rehash due to load factor
-        int dataSize = 50;
-
-        for (int i = 0; i < dataSize; ++i) {
-            carDB.insert(generateRandomCar());
-        }
         cout << "Testing rehash completion after triggering rehash due to load factor...\n";
         RehashCompletionLF(carDB);
 
         // test rehash completion after triggering rehash due to delete ratio
-        for (int i = 0; i < dataSize / 2; ++i) {
-            carDB.remove(generateRandomCar());
-        }
         cout << "Testing rehash completion after triggering rehash due to delete ratio...\n";
         RehashCompletionDR(carDB);
 
