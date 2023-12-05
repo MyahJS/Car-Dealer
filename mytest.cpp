@@ -159,21 +159,21 @@ public:
         }
 
         // test with colliding cars
-        int dataSize = 3;
+        dataSize = 3;
 
-        Car data[dataSize] = {
+        Car data2[dataSize] = {
             Car("model3", 25, 1004, false),
             Car("model4", 30, 1005, false),
             Car("model5", 35, 1006, false)
         };
 
         for (int i = 0; i < dataSize; ++i) {
-            carDB.insert(data[i]);
+            carDB.insert(data2[i]);
         }
 
         // attempt to get each Car object and check if it matches the expected value
         for (int i = 0; i < dataSize; ++i) {
-            Car retrievedCar = carDB.getCar(data[i].getModel(), data[i].getDealer());
+            Car retrievedCar = carDB.getCar(data2[i].getModel(), data2[i].getDealer());
             if (retrievedCar == data[i]) {
                 cout << "PASS: Successfully retrieved the Car object" << endl;
             } else {
