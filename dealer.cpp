@@ -58,8 +58,8 @@ bool CarDB::insert(Car car){
         return false;
 
     // find first index using hash function
-    int index = m_hash(car.getModel()) % m_currentCap;
-    int org_index = index;
+    unsigned int index = m_hash(car.getModel()) % m_currentCap;
+    unsigned int org_index = index;
 
     // find an unoccupied index using the specified probing strategy
     int i = 0;
@@ -108,7 +108,7 @@ bool CarDB::insert(Car car){
 
             // transfer first 25% of cars
             int portion = m_oldSize/4;
-            int i = 0;
+            i = 0;
             int j = 0;
             while (j<portion){
                 if (m_oldTable[i].getUsed()==true){
@@ -143,7 +143,7 @@ bool CarDB::insert(Car car){
         } else {
             portion = portion + m_currentSize;
         }
-        int i = 0;
+        i = 0;
         int j = m_currentSize;
         while (j<portion){
             if (m_oldTable[i].getUsed()==true){
@@ -188,8 +188,8 @@ bool CarDB::remove(Car car){
     // postconditions:
 
     // find first index using hash function
-    int index = m_hash(car.getModel()) % m_currentCap;
-    int org_index = index;
+    unsigned int index = m_hash(car.getModel()) % m_currentCap;
+    unsigned int org_index = index;
     int i = 0;
     // find node in current or old tree and set as deleted
     if (m_oldTable==nullptr){
@@ -211,8 +211,8 @@ bool CarDB::remove(Car car){
             return false;
         }
     } else {
-        int index2 = m_hash(car.getModel()) % m_oldCap;
-        int org_index2 = index2;
+        unsigned int index2 = m_hash(car.getModel()) % m_oldCap;
+        unsigned int org_index2 = index2;
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
                 index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
@@ -270,7 +270,7 @@ bool CarDB::remove(Car car){
 
             // transfer first 25% of cars
             int portion = m_oldSize/4;
-            int i = 0;
+            i = 0;
             int j = 0;
             while (j<portion){
                 if (m_oldTable[i].getUsed()==true){
@@ -305,7 +305,7 @@ bool CarDB::remove(Car car){
         } else {
             portion = portion + m_currentSize;
         }
-        int i = 0;
+        i = 0;
         int j = m_currentSize;
         while (j<portion){
             if (m_oldTable[i].getUsed()==true){
@@ -350,8 +350,8 @@ Car CarDB::getCar(string model, int dealer) const{
     // postconditions:
 
     // get first index using hash function
-    int index = m_hash(model) % m_currentCap;
-    int org_index = index;
+    unsigned int index = m_hash(model) % m_currentCap;
+    unsigned int org_index = index;
     int i = 0;
 
     // check if old table is empty
@@ -373,8 +373,8 @@ Car CarDB::getCar(string model, int dealer) const{
             return EMPTY;
         }
     } else {
-        int index2 = m_hash(model) % m_oldCap;
-        int org_index2 = index2;
+        unsigned int index2 = m_hash(model) % m_oldCap;
+        unsigned int org_index2 = index2;
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY) && !(m_currentTable[index].getDealer()==dealer) && !(m_oldTable[index2].getDealer()==dealer)){
                 index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
@@ -443,8 +443,8 @@ bool CarDB::updateQuantity(Car car, int quantity){
     // postconditions:
 
     // find first index using hash function
-    int index = m_hash(car.getModel()) % m_currentCap;
-    int org_index = index;
+    unsigned int index = m_hash(car.getModel()) % m_currentCap;
+    unsigned int org_index = index;
     int i = 0;
     // find node in current or old tree and set quantity
     if (m_oldTable==nullptr){
@@ -466,8 +466,8 @@ bool CarDB::updateQuantity(Car car, int quantity){
             return false;
         }
     } else {
-        int index2 = m_hash(car.getModel()) % m_oldCap;
-        int org_index2 = index2;
+        unsigned int index2 = m_hash(car.getModel()) % m_oldCap;
+        unsigned int org_index2 = index2;
         if (m_currProbing==QUADRATIC && m_oldProbing==QUADRATIC){
             while (!(m_currentTable[index]==car) && !(m_oldTable[index2]==car) && !(m_currentTable[index]==EMPTY) && !(m_oldTable[index2]==EMPTY)){
                 index = ((org_index % m_currentCap) + (i*i)) % m_currentCap;
