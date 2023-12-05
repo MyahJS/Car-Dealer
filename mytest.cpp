@@ -185,6 +185,9 @@ public:
     void removeTest(CarDB& carDB){
         cout << "Testing remove..." << endl;
 
+        // increase size to avoid rehashing
+        carDB.m_currentSize = 20;
+
         // test with non colliding cars
         int dataSize = 3;
 
@@ -209,9 +212,6 @@ public:
 
         // test with colliding cars
         dataSize = 3;
-
-        // increase size to avoid rehashing
-        carDB.m_currentSize = 20;
 
         Car data2[dataSize] = {
             Car("model3", 25, 1004, false),
