@@ -181,6 +181,7 @@ bool CarDB::insert(Car car){
             m_oldSize = 0;
             m_oldTable = nullptr;
     }
+    return true;
 }
 
 bool CarDB::remove(Car car){
@@ -340,6 +341,7 @@ bool CarDB::remove(Car car){
             m_oldSize = 0;
             m_oldTable = nullptr;
     }
+    return true;
 }
 
 Car CarDB::getCar(string model, int dealer) const{
