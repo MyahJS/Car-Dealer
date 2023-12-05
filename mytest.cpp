@@ -104,7 +104,42 @@ public:
 
 };
 class Tester{
+public:
+    void insertTest(CarDB& carDB){
+        cout << "Testing insert..." << endl;
+        Car car1("model1", 10, 1001, false);
+        Car car2("model2", 15, 1002, false);
+        Car car3("model3", 20, 1003, false);
 
+        carDB.insert(car1);
+        carDB.insert(car2);
+        carDB.insert(car3);
+        
+        checkIndex(carDB, car1, true);
+        checkIndex(carDB, car2, true);
+        checkIndex(carDB, car3, true);
+
+        checkSize(carDB, 3);
+    }
+private:
+    // helper to check for correct index
+    void checkIndex(CarDB& carDB, const Car& car, bool expectedResult) {
+        int index = carDB.m_hash(car.getModel()) % carDB.m_currentCap;
+
+        if (carDB.m_currentTable[index] == car && expectedResult) {
+            cout << "PASS: Inserted at the correct index" << endl;
+        } else {
+            cout << "FAIL: Not inserted at the correct index" << endl;
+        }
+    }
+    // helper to check for correct table size 
+    void checkSize(CarDB& carDB, int expectedSize) {
+        if (carDB.m_currentSize == expectedSize) {
+            cout << "PASS: Data size is correct" << endl;
+        } else {
+            cout << "FAIL: Incorrect data size" << endl;
+        }
+    }
 };
 
 unsigned int hashCode(const string str);
@@ -113,6 +148,10 @@ string carModels[5] = {"challenger", "stratos", "gt500", "miura", "x101"};
 string dealers[5] = {"super car", "mega car", "car world", "car joint", "shack of cars"};
 
 int main(){
+
+    Tester tester;
+    CarDB testdb(MINPRIME, hashCode, QUADRATIC);
+    tester.insertTest(testdb);
     
     vector<Car> dataList;
     Random RndID(MINID,MAXID);
