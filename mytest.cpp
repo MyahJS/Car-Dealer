@@ -174,7 +174,7 @@ public:
         // attempt to get each Car object and check if it matches the expected value
         for (int i = 0; i < dataSize; ++i) {
             Car retrievedCar = carDB.getCar(data2[i].getModel(), data2[i].getDealer());
-            if (retrievedCar == data[i]) {
+            if (retrievedCar == data2[i]) {
                 cout << "PASS: Successfully retrieved the Car object" << endl;
             } else {
                 cout << "FAIL: Incorrect Car object retrieved" << endl;
